@@ -1,0 +1,129 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main(){
+	
+	char barcos[5]{'P','A','C','S','D'};
+	int barcosjug = 5;
+	int barcoscom = 5;
+	
+	int turnos = 0;
+	int i, j, b, ren, col;
+	char aux;
+    srand(time(NULL));
+	
+	char jug[10][10]{{'P','P','P','P','P','-','-','-','-','D'},{'A','-','-','-','-','-','-','-','-','D'},{'A','-','-','-','-','-','-','-','-','-'},{'A','-','-','-','-','-','-','-','-','-'},{'A','-','-','-','-','-','-','-','-','-'},{'-','-','-','-','-','-','-','-','-','-'},{'-','-','-','-','-','-','-','-','-','-'},{'-','-','-','-','-','-','-','-','-','S'},{'-','-','-','-','-','-','-','-','-','S'},{'-','-','-','-','-','-','C','C','C','S'}};
+	char vaciojug[10][10];
+	char com[10][10]{{'A','-','-','-','-','-','-','C','C','C'},{'A','-','-','-','-','-','-','-','-','S'},{'A','-','-','-','-','-','-','-','-','S'},{'A','-','-','-','-','-','-','-','-','S'},{'-','-','-','-','-','-','-','-','-','-'},{'-','-','-','-','-','-','-','-','-','-'},{'-','-','-','-','-','-','-','-','-','-'},{'-','-','-','-','-','-','-','-','-','-'},{'-','-','-','-','-','-','-','-','-','D'},{'P','P','P','P','P','-','-','-','-','D'}};
+	char vaciocom[10][10];
+	
+	for(i = 0; i < 10; i++){
+		for(j = 0; j < 10; j++){
+			vaciojug[i][j] = '-';
+			vaciocom[i][j] = '-';
+		}
+	}
+	
+	printf("\nJuguemos Batalla Naval vs el CPU!!\n\nEl campo de batalla tiene 10x10 casillas.\nEscribe las coordenadas numericas ([renglon],[columna]) donde crees que hay un barco enemigo.\n");
+	printf("\nHay 5 clases de barcos:\n(P):Portaaviones - Abarca 5 casillas.\n(A):Acorazado - Abarca 4 casillas.\n(C):Crucero - Abarca 3 casillas.\n(S):Submarino - Abarca 3 casillas.\n(D):Desctructor - Abarca 2 casillas.\n");
+	
+	printf("\nEste es tu campo de batalla:\n\n");
+	for(i = 0; i < 10; i++){
+		for(j = 0; j < 10; j++){
+			printf("%c", jug[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\nEmpezemos!!");
+	
+	while(turnos < 100){
+		
+		do{
+			printf("\nTurno no. %d. Ingresa las coordenadas: ", turnos+1);
+			scanf("%d,%d", &ren, &col);
+		}while(vaciocom[ren - 1][col - 1] != '-');
+		
+		for(b = 0; b < 5; b++){	
+			if(com[ren - 1][col - 1] == barcos[b]){
+				aux = barcos[b];
+				barcoscom--;
+				printf("Barco del CPU hundido!!\nLe quedan %d barcos al CPU.\n", barcoscom);
+				for(i = 0; i < 10; i++){
+					for(j = 0; j < 10; j++){
+						if(com[i][j] == aux){
+							vaciocom[i][j] = aux;
+						}
+						printf("%c", vaciocom[i][j]);
+					}
+					printf("\n");
+				}
+			}
+		}
+		
+		if(com[ren - 1][col - 1] == '-'){
+			vaciocom[ren - 1][col - 1] = 'X';
+			printf("Aqui no hay barco.\nLe quedan %d barcos al CPU.\n", barcoscom);
+			for(i = 0; i < 10; i++){
+				for(j = 0; j < 10; j++){
+					printf("%c", vaciocom[i][j]);
+				}
+				printf("\n");
+			}
+		}
+		
+		if(barcoscom == 0){
+			printf("\nGanaste!! :D\n");
+			break;
+		}
+		
+		do{
+			do{
+				ren = rand() % 11;
+			}while(ren <= 0);
+			do{
+				col = rand() % 11;
+			}while(col <= 0);
+		}while(vaciojug[ren - 1][col - 1] != '-');
+		printf("\nEl CPU eligio las coordenadas: %d,%d\n", ren, col);
+		
+		for(b = 0; b < 5; b++){	
+			if(jug[ren - 1][col - 1] == barcos[b]){
+				aux = barcos[b];
+				barcosjug--;
+				printf("Barco tuyo hundido!!\nTe quedan %d barcos.\n", barcosjug);
+				for(i = 0; i < 10; i++){
+					for(j = 0; j < 10; j++){
+						if(jug[i][j] == aux){
+							vaciojug[i][j] = aux;
+						}
+						printf("%c", vaciojug[i][j]);
+					}
+					printf("\n");
+				}
+			}
+		}
+		
+		if(jug[ren - 1][col - 1] == '-'){
+			vaciojug[ren - 1][col - 1] = 'X';
+			printf("Aqui no hay barco.\nTe quedan %d barcos.\n", barcosjug);
+			for(i = 0; i < 10; i++){
+				for(j = 0; j < 10; j++){
+					printf("%c", vaciojug[i][j]);
+				}
+				printf("\n");
+			}
+		}
+		
+		if(barcosjug == 0){
+			printf("\nHas perdido!! :(\n");
+			break;
+		}
+		
+		turnos++;
+		
+	}
+		
+	return 0;
+	
+}
